@@ -1,1 +1,1 @@
-Sample todo app in nodejs.
+Sample todo app in nodejs using express.
