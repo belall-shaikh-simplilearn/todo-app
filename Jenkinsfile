@@ -42,8 +42,10 @@ pipeline {
 
         stage('Pull Docker Image') {
             steps {
-                docker.withRegistry('', DOCKER_CREDENTIALS_ID) {
-                    sh "docker pull ${DOCKER_IMAGE}:${BUILD_NUMBER}"
+                script {
+                    docker.withRegistry('', DOCKER_CREDENTIALS_ID) {
+                        sh "docker pull ${DOCKER_IMAGE}:${BUILD_NUMBER}"
+                    }
                 }
             }
         }
@@ -52,7 +54,7 @@ pipeline {
             steps {
                 script {
                     sh "docker rm -f app-container || true"
-                    sh "docker run -d -p 3001:3000 --name app-container ${DOCKER_IMAGE}:${BUILD_NUMBER}"
+                    sh "docker run -d -p 3003:3000 --name app-container ${DOCKER_IMAGE}:${BUILD_NUMBER}"
                 }
             }
         }
