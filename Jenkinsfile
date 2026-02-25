@@ -34,11 +34,25 @@ pipeline {
             }
         }
 
+        stage('Remove Local Image') {
+            steps {
+                sh "docker rmi ${DOCKER_IMAGE}:${BUILD_NUMBER} || true"
+            }
+        }
+
+        stage('Pull Docker Image') {
+            steps {
+                docker.withRegistry('', DOCKER_CREDENTIALS_ID) {
+                    sh "docker pull ${DOCKER_IMAGE}:${BUILD_NUMBER}"
+                }
+            }
+        }
+
         stage('Deploy Container') {
             steps {
                 script {
                     sh "docker rm -f app-container || true"
-                    sh "docker run -d -p 3000:3000 --name app-container ${DOCKER_IMAGE}:${BUILD_NUMBER}"
+                    sh "docker run -d -p 3001:3000 --name app-container ${DOCKER_IMAGE}:${BUILD_NUMBER}"
                 }
             }
         }
